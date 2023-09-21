@@ -1,0 +1,4 @@
+* build test container -> extend with nix packages
+* setup k8s deployment yamls for testing
+* fix docker-bench
+* harmonize kube-bench versioning between repo/container
