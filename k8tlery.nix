@@ -104,7 +104,6 @@ pkgs.mkShell {
 
 		# k8s/ctr tooling
 		pkgs.trivy
-		pkgs.tfsec
 		pkgs.kube-bench
 		pkgs.syft
 		pkgs.grype
@@ -114,6 +113,9 @@ pkgs.mkShell {
 		pkgs.kdigger
 		pkgs.kubectl
 		pkgs.docker
+    pkgs.k9s
+    pkgs.conftest
+    pkgs.kubeshark
 	] ++ (builtins.attrValues customToolDerivations) ++ (builtins.attrValues customScriptDerivations);
 	shellHook = ''
 	  alias k="kubectl"
