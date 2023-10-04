@@ -21,6 +21,7 @@ Dissect container images, container runtimes, container orchestrators.
 | [Docker Bench Security](https://github.com/docker/docker-bench-security) |  | The Docker Bench for Security is a script that checks for dozens of common best-practices around deploying Docker containers in production. |
 | [peirates](https://github.com/inguardians/peirates) |  | Peirates, a Kubernetes penetration tool, enables an attacker to escalate privilege and pivot through a Kubernetes cluster. It automates known techniques to steal and collect service account tokens, secrets, obtain further code execution, and gain control of the cluster. |
 | [TruffleHog](https://github.com/trufflesecurity/trufflehog) |  | Find and verify credentials. |
+| [TruffleHog3](https://github.com/feeltheajf/trufflehog3) |  | This is an enhanced version of the Python-based truffleHog scanner. |
 | [Popeye](https://github.com/derailed/popeye) |  | A Kubernetes cluster resource sanitizer. |
 | [k9s](https://github.com/derailed/k9s) |  | Kubernetes CLI To Manage Your Clusters In Style. |
 | [Hadolint](https://github.com/hadolint/hadolint) |  | Dockerfile linter, validate inline bash, written in Haskell. |
@@ -34,7 +35,11 @@ Dissect container images, container runtimes, container orchestrators.
 | [etcdctl](https://github.com/etcd-io/etcd/tree/main/etcdctl) |  | etcdctl is a command line client for etcd. |
 | [gitleaks](https://github.com/gitleaks/gitleaks) |  | Gitleaks is a SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos. Gitleaks is an easy-to-use, all-in-one solution for detecting secrets, past or present, in your code. |
 | [kubeletctl](https://github.com/cyberark/kubeletctl) |  | Kubeletctl is a command line tool that implement kubelet's API. Part of kubelet's API is documented but most of it is not. This tool covers all the documented and undocumented APIs. |
-| [kubehunter](https://github.com/aquasecurity/kube-hunter) |  | Hunt for security weaknesses in Kubernetes clusters. |
+| [kube-hunter](https://github.com/aquasecurity/kube-hunter) |  | Hunt for security weaknesses in Kubernetes clusters. |
+| [netassert](https://github.com/controlplaneio/netassert) |  | Network security testing for Kubernetes DevSecOps workflows. |
+| [truffleproc](https://github.com/controlplaneio/truffleproc) |  | hunt secrets in process memory (TruffleHog & gdb mashup) |
+| []() |  |  |
+
 
 ## usage
 
@@ -61,3 +66,90 @@ kubectl apply -f k8tlery-fullaccess.yaml
 ```bash
 kubectl exec -it k8tlery -- bash
 ```
+
+## audit
+
+### container image forensics
+TBD
+
+### pod/container forensics
+
+* container runtime
+```bash
+cat /proc/self/cgroup
+```
+* container runtime sockets (might be slow)
+```bash
+find /run -type f -name "*.sock"  #adjust target folder
+# also need to review '/run' folder manually
+```
+* hosts information
+```bash
+cat /etc/hosts
+```
+* mount information
+```bash
+mount
+```
+* file system
+```bash
+ls -la /
+ls -la /home/
+ls -la /root/
+ls -la /tmp/
+```
+* environment variables
+```bash
+printenv
+```
+* k8s information
+  * kdigger
+```bash
+curl -fSL -o /tmp/kdigger https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
+chmod +x /tmp/kdigger
+alias kdigger='/tmp/kdigger'
+kdigger dig all
+```
+  * kube-hunter
+```bash
+pip3 install kube-hunter
+kube-hunter --pod
+```
+* secrets (trufflehog3)
+```bash
+pip3 install trufflehog3
+trufflehog3 /var/run  #choose relevant target folders
+```
+  * custom rule
+```
+#k8s-goat.rule
+- id: k8s-goat.flag
+  message: found k8s-goat flag
+  pattern: "k8s-goat-"
+  severity: HIGH
+```
+* secrets from process memory (truffleproc): _needs work_
+```bash
+trufflehog3 -r k8s-goat.rule /tmp  #adjust rule and target
+```
+* vulnerable packages (trivy)
+```bash
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+trivy rootfs /
+```
+* k8s API (peirates)
+```bash
+curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+tar -xvf /tmp/peirates.tar.xz -C /tmp
+chmod a+x /tmp/peirates-linux-amd64/peirates
+alias peirates='/tmp/peirates-linux-amd64/peirates'
+peirates
+```
+
+### Pod exploitation
+
+* resource exhaustion (DoS)
+```bash
+stress-ng --cpu 2 --cpu-load 1 --vm 2 --vm-bytes 100m -t 100s --verify -v  #adjust to use case
+```
+

@@ -3,38 +3,38 @@ LABEL NAME="k8tlery" MAINTAINER="xoph"
 
 WORKDIR /tmp
 
-RUN apt update && apt install -y  curl wget neovim htop nmap python3 python2 python3-pip \
-    ca-certificates iputils-arping iputils-ping iputils-tracepath net-tools git \
-    unzip whois tcpdump openssl proxychains-ng procps zmap scapy netcat-openbsd redis \
-    postgresql-client default-mysql-client masscan nikto wordlists mongodb jq yq \
+RUN apt update && apt install -y  curl wget neovim htop nmap python3 python3-pip \
+    dnsutils ca-certificates iputils-arping iputils-ping iputils-tracepath net-tools git \
+    unzip whois tcpdump openssl proxychains-ng procps zmap netcat-openbsd masscan \
+    nikto wordlists jq yq iproute2 stress-ng \
     && apt-get clean && rm -rf /var/lib/lists/*
 
-ENV DOCKER_VERSION=19.03.9
-ENV HELM_VERSION=3.2.2
+ENV DOCKER_VERSION=24.0.6
 ENV KUBECTL_VERSION=1.28.2
-ENV HELMV2_VERSION=2.16.7
-ENV AUDIT2RBAC_VERSION=0.8.0
+#ENV HELM_VERSION=3.2.2
+#ENV HELMV2_VERSION=2.16.7
+ENV AUDIT2RBAC_VERSION=0.10.0
 ENV AMICONTAINED_VERSION=0.4.9
-ENV KUBESEC_VERSION=2.11.4
+ENV KUBESEC_VERSION=2.13.0
 ENV CFSSL_VERSION=1.6.4
 ENV AMASS_VERSION=4.2.0
 ENV KUBECTL_WHOCAN_VERSION=0.4.0
 ENV ETCDCTL_VERSION=3.4.9
 ENV KUBEBENCH_VERSION=0.6.17
-ENV GITLEAKS_VERSION=8.8.11
+ENV GITLEAKS_VERSION=8.18.0
 ENV TLDR_VERSION=0.6.1
 ENV GOBUSTER_VERSION=3.6.0
 ENV KUBELETCTL_VERSION=1.11
-ENV KUBEAUDIT_VERSION=0.18.0
+ENV NETASSERT_VERSION=2.0.2
+ENV KUBEAUDIT_VERSION=0.22.0
 ENV KDIGGER_VERSION=1.5.0
 ENV PEIRATES_VERSION=1.1.13
 ENV POPEYE_VERSION=0.9.0
 ENV HADOLINT_VERSION=2.10.0
-ENV CONFTEST_VERSION=0.21.0
+#ENV CONFTEST_VERSION=0.45.0
 ENV JLESS_VERSION=0.9.0
 ENV TRUFFLEHOG_VERSION=3.56.1
 
-#COPY pwnchart /root/pwnchart
 COPY res/.bashrc /root/.bashrc
 
 # Install kubectl
@@ -64,29 +64,35 @@ RUN curl -fSL https://github.com/hadolint/hadolint/releases/download/v${HADOLINT
     && chmod a+x /usr/local/bin/hadolint
 
 # Install Conftest
-RUN curl -fSLO https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz \
-    && tar -xvzf conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz \
-    && mv conftest /usr/local/bin/conftest \
-    && chmod a+x /usr/local/bin/conftest
+#RUN curl -fSLO https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz \
+#    && tar -xvzf conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz \
+#    && mv conftest /usr/local/bin/conftest \
+#    && chmod a+x /usr/local/bin/conftest
 
 # Install Helm
-RUN curl -LO https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
-    && tar -zxvf helm-v${HELM_VERSION}-linux-amd64.tar.gz \
-    && mv linux-amd64/helm /usr/local/bin/helm \
-    && chmod a+x /usr/local/bin/helm
+#RUN curl -LO https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+#    && tar -zxvf helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+#    && mv linux-amd64/helm /usr/local/bin/helm \
+#    && chmod a+x /usr/local/bin/helm
 
 # Install Helm v2
-RUN curl -LO https://get.helm.sh/helm-v${HELMV2_VERSION}-linux-amd64.tar.gz \
-    && tar -zxvf helm-v${HELMV2_VERSION}-linux-amd64.tar.gz \
-    && mv linux-amd64/helm /usr/local/bin/helm2 \
-    && chmod a+x /usr/local/bin/helm2
+#RUN curl -LO https://get.helm.sh/helm-v${HELMV2_VERSION}-linux-amd64.tar.gz \
+#    && tar -zxvf helm-v${HELMV2_VERSION}-linux-amd64.tar.gz \
+#    && mv linux-amd64/helm /usr/local/bin/helm2 \
+#    && chmod a+x /usr/local/bin/helm2
 
 # Install audit2rbac
-RUN curl -LO https://github.com/liggitt/audit2rbac/releases/download/v${AUDIT2RBAC_VERSION}/audit2rbac-linux-amd64.tar.gz
+#RUN curl -LO https://github.com/liggitt/audit2rbac/releases/download/v${AUDIT2RBAC_VERSION}/audit2rbac-linux-amd64.tar.gz
 
 # Install amicontained
 RUN curl -fSL https://github.com/genuinetools/amicontained/releases/download/v${AMICONTAINED_VERSION}/amicontained-linux-amd64 -o /usr/local/bin/amicontained \
     && chmod a+x /usr/local/bin/amicontained
+
+# Install netassert
+RUN curl -fSLO https://github.com/controlplaneio/netassert/releases/download/v${NETASSERT_VERSION}/netassert_v${NETASSERT_VERSION}_linux_amd64.tar.gz \
+    && tar -xvzf netassert_v${NETASSERT_VERSION}_linux_amd64.tar.gz \
+    && mv netassert /usr/local/bin/netassert \
+    && chmod a+x /usr/local/bin/netassert
 
 # Install kubesec
 RUN curl -fSLO https://github.com/controlplaneio/kubesec/releases/download/v${KUBESEC_VERSION}/kubesec_linux_amd64.tar.gz \
@@ -195,7 +201,7 @@ RUN curl -fSLO https://github.com/PaulJuliusMartinez/jless/releases/download/v${
     && chmod a+x /usr/local/bin/jless
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir awscli
+RUN pip3 install --no-cache-dir awscli trufflehog3
 
 # Clean up
 RUN rm -rf /tmp/* ;
