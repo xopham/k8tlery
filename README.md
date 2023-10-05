@@ -1,8 +1,9 @@
 # k8tlery
 
 ![](docs/assets/textlogo.png)
+![](assets/textlogo.png)
 
-Dissect container images, container runtimes, container orchestrators.
+Dissect container images, runtimes, and orchestrators.
 
 ## inventory
 

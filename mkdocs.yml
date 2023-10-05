@@ -27,7 +27,10 @@ theme:
   logo: 'assets/logo.png'
   favicon: 'assets/logo.png'
   features:
-    - navigation.top
+    - content.code.copy
+    - content.code.select
+#  features:
+#  - navigation.top
 
 # Extensions
 markdown_extensions:
@@ -37,12 +40,20 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.tabbed
   - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
   - toc:
         permalink: ⚓︎
 
 # Plugins
+plugins:
+  - render_swagger
 
 # Customization
 extra:
@@ -73,4 +84,6 @@ extra:
 
 # Page tree
 nav:
-  - Overview: README.md
+  - Documentation: README.md
+  - KubernetesAPI.md
+  #- KubernetesAPI2.html
