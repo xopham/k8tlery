@@ -21,5 +21,8 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material
+      - run: |
+          wget https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json
+          jq -s '.[0] * .[1]' swagger.json docs/assets/swagger-extension.json > docs/KubernetesAPI/swagger.json
       - run: mkdocs gh-deploy --force
 

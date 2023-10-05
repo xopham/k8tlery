@@ -82,5 +82,4 @@ extra:
 # Page tree
 nav:
   - Documentation: README.md
-  - KubernetesAPI.md
-  #- KubernetesAPI2.html
+  - KubernetesAPI/KubernetesAPI.md

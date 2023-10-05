@@ -1,0 +1,7 @@
+{
+  "host": "kubernetes.default",
+  "schemes": [
+    "https",
+    "http"
+  ]
+}
