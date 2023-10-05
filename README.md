@@ -1,6 +1,6 @@
 # k8tlery
 
-![](img/k8tlery-logo2.png)
+![](docs/assets/textlogo.png)
 
 Dissect container images, container runtimes, container orchestrators.
 

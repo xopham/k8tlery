@@ -1,1 +1,77 @@
-site_name: My Docs
+# Project information
+site_name: k8tlery - Dissect container images, runtimes, and orchestrators.
+
+site_url: https://xopham.github.io/k8tlery/
+site_description: >-
+    Penetration testing tool collection, instructions, nix-shell, test
+    container and information for hacking kubernetes and docker containers.
+
+# Repository
+repo_name: xopham/k8tlery
+repo_url: https://github.com/xopham/k8tlery
+edit_uri: ""
+
+# Company
+copyright:  <a href="https://securesystems.de">Secure Systems Engineering GmbH</a> 
+
+
+# Configuration
+theme:
+  language: en
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    primary: blue
+  font:
+    text: Roboto
+    code: Roboto Mono
+  logo: 'assets/logo.png'
+  favicon: 'assets/logo.png'
+  features:
+    - navigation.top
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - toc:
+        permalink: ⚓︎
+
+# Plugins
+
+# Customization
+extra:
+  version:
+      provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/sse-secure-systems
+      name: SSE on GitHub
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/sse-blog
+      name: SSE on Medium
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UCReAmr98RzwYZeWG6CAwOhg
+      name: SSE on YouTube
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/sse_gmbh
+      name: SSE on Twitter
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/sse-secure-systems-engineering
+      name: SSE on LinkedIn
+    - icon: fontawesome/solid/link
+      link: https://www.securesystems.de/
+      name: SSE Website
+    - icon: fontawesome/solid/envelope
+      link: mailto:christoph.hamsen@securesystems.dev
+      name: Email contact
+
+# Page tree
+nav:
+  - Overview: README.md
