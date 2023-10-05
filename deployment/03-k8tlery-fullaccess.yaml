@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: null
-  name: k8tlery
+  name: k8tlery-fullaccess
 spec:
   containers:
   - name: k8tlery
@@ -15,6 +15,7 @@ spec:
     volumeMounts:
     - mountPath: /hostfs
       name: host
+  serviceAccountName: k8tlery-admin-sa
   hostNetwork: true
   hostPID: true
   tolerations:

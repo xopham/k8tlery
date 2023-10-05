@@ -44,6 +44,20 @@ Dissect container images, runtimes, and orchestrators.
 | [truffleproc](https://github.com/controlplaneio/truffleproc) |  | hunt secrets in process memory (TruffleHog & gdb mashup) |
 | []() |  |  |
 
+## build & push
+
+* build
+```bash
+docker buildx build -t ghcr.io/xopham/k8tlery:$K8TLERY_VERSION -t ghcr.io/xopham/k8tlery:latest .
+```
+* push
+```
+docker push ghcr.io/xopham/k8tlery --all-tags
+```
+* re-tag
+```bash
+find ./ -type f -exec sed -i "s%ghcr\.io\/xopham\/k8tlery\:v.*%ghcr\.io\/xopham\/k8tlery\:$K8TLERY_VERSION%g" {} \;
+```
 
 ## usage
 
@@ -62,9 +76,13 @@ docker -it --rm ghcr.io/xopham/k8tlery:<tag>
 ### cluster
 
 ```bash
-kubectl apply -f deployment/k8tlery.yaml
+kubectl apply -f deployment/
 #or
-kubectl apply -f deployment/k8tlery-fullaccess.yaml
+kubectl apply -f deployment/01-roles.yaml
+kubectl apply -f deployment/02-k8tlery.yaml
+#or
+kubectl apply -f deployment/01-roles.yaml
+kubectl apply -f deployment/03-k8tlery-fullaccess.yaml
 ```
 
 ```bash

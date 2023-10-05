@@ -10,4 +10,5 @@ spec:
     imagePullPolicy: Always
     command: ["/bin/sh", "-c", "sleep infinity"]
     resources: {}
+  serviceAccountName: k8tlery-admin-sa
 status: {}

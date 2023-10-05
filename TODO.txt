@@ -2,4 +2,5 @@
 * setup k8s deployment yamls for testing
 * fix docker-bench
 * harmonize kube-bench versioning between repo/container
-* fix k8s api spec server
+* fix k8s api versions
+* add versioning (images, docs)

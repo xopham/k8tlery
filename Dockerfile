@@ -6,7 +6,7 @@ WORKDIR /tmp
 RUN apt update && apt install -y  curl wget neovim htop nmap python3 python3-pip \
     dnsutils ca-certificates iputils-arping iputils-ping iputils-tracepath net-tools git \
     unzip whois tcpdump openssl proxychains-ng procps zmap netcat-openbsd masscan \
-    nikto wordlists jq yq iproute2 stress-ng \
+    nikto wordlists jq yq iproute2 stress-ng libxcb-shape0 libxcb-render-util0 \
     && apt-get clean && rm -rf /var/lib/lists/*
 
 ENV DOCKER_VERSION=24.0.6
