@@ -29,8 +29,7 @@ theme:
   features:
     - content.code.copy
     - content.code.select
-#  features:
-#  - navigation.top
+    - navigation.top
 
 # Extensions
 markdown_extensions:
@@ -52,8 +51,6 @@ markdown_extensions:
         permalink: ⚓︎
 
 # Plugins
-plugins:
-  - render_swagger
 
 # Customization
 extra:
