@@ -1,6 +1,7 @@
 # k8tlery
 
 ![](img/k8tlery-logo2.png)
+
 Dissect container images, container runtimes, container orchestrators.
 
 ## inventory
@@ -17,6 +18,7 @@ Dissect container images, container runtimes, container orchestrators.
 | [kdigger](https://github.com/quarkslab/kdigger) |  | Kubernetes focused container assessment and context discovery tool for penetration testing. |
 | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |  | Kubernetes provides a command line tool for communicating with a Kubernetes cluster's control plane, using the Kubernetes API. |
 | [docker](https://github.com/docker/cli) |  | Command line interface for interacting with docker container images. |
+| [dive](https://github.com/wagoodman/dive) |  | A tool for exploring a docker image, layer contents, and discovering ways to shrink the size of your Docker/OCI image. |
 | [crictl](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) |  | CLI and validation tools for Kubelet Container Runtime Interface (CRI). |
 | [KubiScan](https://github.com/cyberark/KubiScan) |  | A tool to scan Kubernetes cluster for risky permissions. |
 | [Docker Bench Security](https://github.com/docker/docker-bench-security) |  | The Docker Bench for Security is a script that checks for dozens of common best-practices around deploying Docker containers in production. |
@@ -59,9 +61,9 @@ docker -it --rm ghcr.io/xopham/k8tlery:<tag>
 ### cluster
 
 ```bash
-kubectl apply -f k8tlery.yaml
+kubectl apply -f deployment/k8tlery.yaml
 #or
-kubectl apply -f k8tlery-fullaccess.yaml
+kubectl apply -f deployment/k8tlery-fullaccess.yaml
 ```
 
 ```bash
@@ -71,7 +73,39 @@ kubectl exec -it k8tlery -- bash
 ## audit
 
 ### container image forensics
-TBD
+
+* download and save image
+```bash
+docker pull $IMAGE
+docker save $IMAGE > image.tar
+docker image ls
+```
+* inspect image content
+```bash
+docker inspect $IMAGE
+docker history --no-trunc $IMAGE
+```
+* inspect image layers (dive)
+```bash
+dive $IMAGE
+```
+* extract file from image.tar (nix-shell custom functions)
+```bash
+layer_list $IMAGETAR $LAYERID $FILE  #run 'layer_list' for help
+layer_extract $IMAGETAR $LAYERID $FILE  #run 'layer_list' for help
+
+```
+* create container w/o running it
+```bash
+docker create --name container $IMAGE  #returns container ID CONTID
+docker container ls -a  #displays all available container IDs
+```
+* inspect container filesystems
+```bash
+mkdir $FOLDER
+docker export $CONTID | tar -xC $FOLDER  #make sure to unpac to dedicated folder
+ls -la $FOLDER
+```
 
 ### pod/container forensics
 
@@ -105,17 +139,17 @@ printenv
 ```
 * k8s information
   * kdigger
-```bash
-curl -fSL -o /tmp/kdigger https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
-chmod +x /tmp/kdigger
-alias kdigger='/tmp/kdigger'
-kdigger dig all
-```
+  ```bash
+  curl -fSL -o /tmp/kdigger https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
+  chmod +x /tmp/kdigger
+  alias kdigger='/tmp/kdigger'
+  kdigger dig all
+  ```
   * kube-hunter
-```bash
-pip3 install kube-hunter
-kube-hunter --pod
-```
+  ```bash
+  pip3 install kube-hunter
+  kube-hunter --pod
+  ```
 * secrets (trufflehog3)
 ```bash
 pip3 install trufflehog3
@@ -138,14 +172,24 @@ trufflehog3 -r k8s-goat.rule /tmp  #adjust rule and target
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 trivy rootfs /
 ```
-* k8s API (peirates)
-```bash
-curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
-tar -xvf /tmp/peirates.tar.xz -C /tmp
-chmod a+x /tmp/peirates-linux-amd64/peirates
-alias peirates='/tmp/peirates-linux-amd64/peirates'
-peirates
-```
+* k8s APIs
+  * curl
+  ```bash
+  APISERVER=https://${KUBERNETES_SERVICE_HOST}
+  SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+  NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+  TOKEN=$(cat ${SERVICEACCOUNT}/token)
+  CACERT=${SERVICEACCOUNT}/ca.crt
+  curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api
+  ```
+  * peirates
+  ```bash
+  curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+  tar -xvf /tmp/peirates.tar.xz -C /tmp
+  chmod a+x /tmp/peirates-linux-amd64/peirates
+  alias peirates='/tmp/peirates-linux-amd64/peirates'
+  peirates
+  ```
 
 ### Pod exploitation
 
@@ -154,3 +198,8 @@ peirates
 stress-ng --cpu 2 --cpu-load 1 --vm 2 --vm-bytes 100m -t 100s --verify -v  #adjust to use case
 ```
 
+## references
+
+* [HackTricks](https://book.hacktricks.xyz/) (e.g. [pentesting docker](https://book.hacktricks.xyz/network-services-pentesting/2375-pentesting-docker), [pentesting kubernetes](https://cloud.hacktricks.xyz/pentesting-cloud/kubernetes-security))
+* [Kubernetes Goat](https://madhuakula.com/kubernetes-goat/)
+* [OWASP Kubernetes Security CS](https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html)

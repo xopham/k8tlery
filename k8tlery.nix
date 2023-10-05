@@ -108,6 +108,7 @@ pkgs.mkShell {
 		pkgs.syft
 		pkgs.grype
 		pkgs.checkov
+    pkgs.dive
 		pkgs.kubeaudit
 		pkgs.cosign
 		pkgs.kdigger
@@ -124,5 +125,47 @@ pkgs.mkShell {
     alias kubiscan="python3.11 $kubiscanPath/code/KubiScan.py"
     docker_bench="/nix/store/$(ls -t /nix/store/ | grep "docker_bench-x$" | head -1)"
     alias docker_bench="$docker_bench"
+    # Function to list the contents of a specific file from a Docker image layer
+    layer_list() {
+        # Input parameters
+        local image="$1"  # Docker image name via `docker save -o image.tar IMAGE:TAG`
+        local id="$2"     # Layer ID, e.g. via 'dive'
+        local file="$3"   # File to list
+
+        # Check if all parameters are provided
+        if [[ -z "$image" || -z "$id" || -z "$file" ]]; then
+            echo "Error: Missing input parameters."
+            echo "Usage: layer_list <image> <id> <file>"
+            echo "  <image>: Docker image name"
+            echo "  <id>: Layer ID in the Docker image"
+            echo "  <file>: Name of the file to list from the specified layer"
+            return 1
+        fi
+
+        # List the contents of the file from the specified layer of the Docker image
+        tar -Oxf "$image" "$id/layer.tar" | tar tvf - "$file"
+    }
+    # Function to extract a specific file from a Docker image layer
+    layer_extract() {
+        # Input parameters
+        local image="$1"  # Docker image tar via `docker save -o image.tar IMAGE:TAG`
+        local id="$2"     # Layer ID, e.g. via dive
+        local file="$3"   # File to extract (reference inside layer, no leading '/')
+
+        # Check if all parameters are provided
+        if [[ -z "$image" || -z "$id" || -z "$file" ]]; then
+            echo "Error: Missing input parameters."
+            echo "Usage: layer_extract <image> <id> <file>"
+            echo "  <image>: Docker image name"
+            echo "  <id>: Layer ID in the Docker image"
+            echo "  <file>: Name of the file to extract from the specified layer"
+            return 1
+        fi
+
+        # Extract the file from the specified layer of the Docker image
+        tar -Oxf "$image" "$id/layer.tar" | tar xvf - "$file"
+    }
+
+
 	'';
 }
