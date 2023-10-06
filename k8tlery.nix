@@ -114,6 +114,7 @@ pkgs.mkShell {
 		pkgs.kdigger
 		pkgs.kubectl
 		pkgs.docker
+    pkgs.docker-compose
     pkgs.k9s
     pkgs.conftest
     pkgs.kubeshark

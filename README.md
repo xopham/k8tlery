@@ -5,7 +5,7 @@
 
 Dissect container images, runtimes, and orchestrators.
 
-## inventory
+## Inventory
 
 | tool          | scope         | description   |
 | ------------- | ------------- | ------------- |
@@ -44,7 +44,7 @@ Dissect container images, runtimes, and orchestrators.
 | [truffleproc](https://github.com/controlplaneio/truffleproc) |  | hunt secrets in process memory (TruffleHog & gdb mashup) |
 | []() |  |  |
 
-## build & push
+## Build & push
 
 * build
 ```bash
@@ -59,7 +59,7 @@ docker push ghcr.io/xopham/k8tlery --all-tags
 find ./ -type f -exec sed -i "s%ghcr\.io\/xopham\/k8tlery\:v.*%ghcr\.io\/xopham\/k8tlery\:$K8TLERY_VERSION%g" {} \;
 ```
 
-## usage
+## Usage
 
 ### nix-shell
 
@@ -67,13 +67,13 @@ find ./ -type f -exec sed -i "s%ghcr\.io\/xopham\/k8tlery\:v.*%ghcr\.io\/xopham\
 nix-shell k8tlery.nix
 ```
 
-### docker
+### Docker
 
 ```bash
 docker -it --rm ghcr.io/xopham/k8tlery:<tag>
 ```
 
-### cluster
+### Cluster
 
 ```bash
 kubectl apply -f deployment/
@@ -89,9 +89,9 @@ kubectl apply -f deployment/03-k8tlery-fullaccess.yaml
 kubectl exec -it k8tlery -- bash
 ```
 
-## audit
+## Audit
 
-### container image forensics
+### Container image forensics
 
 * download and save image
 ```bash
@@ -125,8 +125,15 @@ mkdir $FOLDER
 docker export $CONTID | tar -xC $FOLDER  #make sure to unpac to dedicated folder
 ls -la $FOLDER
 ```
+### Cluster information gathering
 
-### pod/container forensics
+* misconfiguration scan
+    * trivy
+    ```bash
+    trivy k8s --report summary cluster
+    ```
+
+### Pod/container information gathering
 
 * container runtime
 ```bash
@@ -157,35 +164,35 @@ ls -la /tmp/
 printenv
 ```
 * k8s information
-  * kdigger
-  ```bash
-  curl -fSL -o /tmp/kdigger https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
-  chmod +x /tmp/kdigger
-  alias kdigger='/tmp/kdigger'
-  kdigger dig all
-  ```
-  * kube-hunter
-  ```bash
-  pip3 install kube-hunter
-  kube-hunter --pod
-  ```
+    * kdigger
+    ```bash
+    curl -fSL -o /tmp/kdigger https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
+    chmod +x /tmp/kdigger
+    alias kdigger='/tmp/kdigger'
+    kdigger dig all
+    ```
+    * kube-hunter
+    ```bash
+    pip3 install kube-hunter
+    kube-hunter --pod
+    ```
 * secrets (trufflehog3)
 ```bash
 pip3 install trufflehog3
 trufflehog3 /var/run  #choose relevant target folders
 ```
-  * custom rule
-```
-#k8s-goat.rule
-- id: k8s-goat.flag
-  message: found k8s-goat flag
-  pattern: "k8s-goat-"
-  severity: HIGH
-```
+    * custom rule
+    ```
+    #k8s-goat.rule
+    - id: k8s-goat.flag
+      message: found k8s-goat flag
+      pattern: "k8s-goat-"
+      severity: HIGH
+    ```
+    ```bash
+    trufflehog3 -r k8s-goat.rule /tmp  #adjust rule and target
+    ```
 * secrets from process memory (truffleproc): _needs work_
-```bash
-trufflehog3 -r k8s-goat.rule /tmp  #adjust rule and target
-```
 * vulnerable packages (trivy)
 ```bash
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
@@ -216,8 +223,16 @@ trivy rootfs /
 ```bash
 stress-ng --cpu 2 --cpu-load 1 --vm 2 --vm-bytes 100m -t 100s --verify -v  #adjust to use case
 ```
+* various angles (peirates)
+```bash
+curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+tar -xvf /tmp/peirates.tar.xz -C /tmp
+chmod a+x /tmp/peirates-linux-amd64/peirates
+alias peirates='/tmp/peirates-linux-amd64/peirates'
+peirates
+```
 
-## references
+## References
 
 * [HackTricks](https://book.hacktricks.xyz/) (e.g. [pentesting docker](https://book.hacktricks.xyz/network-services-pentesting/2375-pentesting-docker), [pentesting kubernetes](https://cloud.hacktricks.xyz/pentesting-cloud/kubernetes-security))
 * [Kubernetes Goat](https://madhuakula.com/kubernetes-goat/)
