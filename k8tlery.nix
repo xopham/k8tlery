@@ -99,6 +99,7 @@ pkgs.mkShell {
     pkgs.yq
 		pkgs.findutils
 		pkgs.tree
+    pkgs.age
 		(pkgs.python311.withPackages(ps: with ps; [kubernetes ptable]))
 
 		# general security tooling
