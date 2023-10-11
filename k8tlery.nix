@@ -95,6 +95,8 @@ pkgs.mkShell {
 	buildInputs = [
 		# basics
 		pkgs.vim
+    pkgs.jq
+    pkgs.yq
 		pkgs.findutils
 		pkgs.tree
 		(pkgs.python311.withPackages(ps: with ps; [kubernetes ptable]))
@@ -116,6 +118,7 @@ pkgs.mkShell {
 		pkgs.docker
     pkgs.docker-compose
     pkgs.k9s
+    pkgs.crane
     pkgs.conftest
     pkgs.kubeshark
 	] ++ (builtins.attrValues customToolDerivations) ++ (builtins.attrValues customScriptDerivations);
