@@ -19,6 +19,7 @@ Dissect container images, runtimes, and orchestrators.
 | [kdigger](https://github.com/quarkslab/kdigger) |  | Kubernetes focused container assessment and context discovery tool for penetration testing. |
 | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |  | Kubernetes provides a command line tool for communicating with a Kubernetes cluster's control plane, using the Kubernetes API. |
 | [docker](https://github.com/docker/cli) |  | Command line interface for interacting with docker container images. |
+| [podman](https://github.com/containers/podman) |  | A tool for managing OCI containers and pods. |
 | [dive](https://github.com/wagoodman/dive) |  | A tool for exploring a docker image, layer contents, and discovering ways to shrink the size of your Docker/OCI image. |
 | [crictl](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) |  | CLI and validation tools for Kubelet Container Runtime Interface (CRI). |
 | [KubiScan](https://github.com/cyberark/KubiScan) |  | A tool to scan Kubernetes cluster for risky permissions. |
@@ -42,7 +43,8 @@ Dissect container images, runtimes, and orchestrators.
 | [kube-hunter](https://github.com/aquasecurity/kube-hunter) |  | Hunt for security weaknesses in Kubernetes clusters. |
 | [netassert](https://github.com/controlplaneio/netassert) |  | Network security testing for Kubernetes DevSecOps workflows. |
 | [truffleproc](https://github.com/controlplaneio/truffleproc) |  | hunt secrets in process memory (TruffleHog & gdb mashup) |
-| []() |  |  |
+| [checkpointctl](https://github.com/checkpoint-restore/checkpointctl) |  | Tool to inspect Kubernetes and Podman checkpoints. |
+| [...]() |  | ... |
 
 ## Build & push
 
@@ -125,6 +127,31 @@ mkdir $FOLDER
 docker export $CONTID | tar -xC $FOLDER  #make sure to unpac to dedicated folder
 ls -la $FOLDER
 ```
+
+### Container forensics
+* create checkpoint of running container w/o interruption, e.g.:
+```bash
+sudo podman container checkpoint -e $OUTPUTFILE $CONTID --leave-running
+```
+* investigate checkpoint (checkpointctl)
+    * get info
+    ```
+    checkpointctl show $OUTPUTFILE
+    ```
+    * get full details
+    ```
+    checkpointctl inspect $OUTPUTFILE --all
+    ```
+    * parse memory
+    ```bash
+    checkpointctl memparse #OUTPUTFILE --all
+    ```
+    * inspect container drift
+    ```bash
+    tar -xf $OUTPUTFILE -C $TARGETFOLDER
+    tar -xf $TARGETFOLDER/rootfs-diff.tar $DIFFFOLDER
+    ```
+
 ### Cluster information gathering
 
 * misconfiguration scan
@@ -199,23 +226,23 @@ curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/inst
 trivy rootfs /
 ```
 * k8s APIs
-  * curl
-  ```bash
-  APISERVER=https://${KUBERNETES_SERVICE_HOST}
-  SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-  NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
-  TOKEN=$(cat ${SERVICEACCOUNT}/token)
-  CACERT=${SERVICEACCOUNT}/ca.crt
-  curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api
-  ```
-  * peirates
-  ```bash
-  curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
-  tar -xvf /tmp/peirates.tar.xz -C /tmp
-  chmod a+x /tmp/peirates-linux-amd64/peirates
-  alias peirates='/tmp/peirates-linux-amd64/peirates'
-  peirates
-  ```
+    * curl
+    ```bash
+    APISERVER=https://${KUBERNETES_SERVICE_HOST}
+    SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+    NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+    TOKEN=$(cat ${SERVICEACCOUNT}/token)
+    CACERT=${SERVICEACCOUNT}/ca.crt
+    curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api
+    ```
+    * peirates
+    ```bash
+    curl -fSL -o /tmp/peirates.tar.xz https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+    tar -xvf /tmp/peirates.tar.xz -C /tmp
+    chmod a+x /tmp/peirates-linux-amd64/peirates
+    alias peirates='/tmp/peirates-linux-amd64/peirates'
+    peirates
+    ```
 
 ### Pod exploitation
 

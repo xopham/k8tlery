@@ -118,6 +118,7 @@ pkgs.mkShell {
 		pkgs.kubectl
 		pkgs.docker
     pkgs.docker-compose
+    pkgs.podman
     pkgs.k9s
     pkgs.crane
     pkgs.conftest
