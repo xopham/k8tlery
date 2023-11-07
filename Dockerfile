@@ -11,6 +11,7 @@ RUN apt update && apt install -y  curl wget neovim htop nmap python3 python3-pip
 
 ENV DOCKER_VERSION=24.0.6
 ENV KUBECTL_VERSION=1.28.2
+ENV CRICTL_VERSION=1.28.0
 #ENV HELM_VERSION=3.2.2
 #ENV HELMV2_VERSION=2.16.7
 ENV AUDIT2RBAC_VERSION=0.10.0
@@ -41,6 +42,12 @@ COPY res/.bashrc /root/.bashrc
 RUN curl -LO https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && mv kubectl /usr/local/bin/kubectl \
     && chmod a+x /usr/local/bin/kubectl
+
+# Install crictl
+RUN curl -fSLO https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz \
+    && tar -xvzf crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz \
+    && mv crictl /usr/local/bin/crictl \
+    && chmod a+x /usr/local/bin/crictl
 
 # Install kubeaudit
 RUN curl -fSLO https://github.com/Shopify/kubeaudit/releases/download/v${KUBEAUDIT_VERSION}/kubeaudit_${KUBEAUDIT_VERSION}_linux_amd64.tar.gz \
