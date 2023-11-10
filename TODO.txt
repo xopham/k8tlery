@@ -4,3 +4,4 @@
 * harmonize kube-bench versioning between repo/container
 * fix k8s api versions
 * add versioning (images, docs)
+* add Kubesploit? https://github.com/cyberark/kubesploit
