@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: kube-hunter
-          image: ghcr.io/xopham/k8tlery:v0.1
+          image: ghcr.io/xopham/k8tlery:latest
           imagePullPolicy: Always
           command: ["kube-hunter"]
           args: ["--pod"]

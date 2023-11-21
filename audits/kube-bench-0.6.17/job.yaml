@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - command: ["kube-bench"]
-          image: ghcr.io/xopham/k8tlery:v0.1
+          image: ghcr.io/xopham/k8tlery:latest
           name: kube-bench
           volumeMounts:
             - mountPath: /var/lib/etcd

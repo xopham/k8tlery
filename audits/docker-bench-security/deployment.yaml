@@ -31,7 +31,7 @@ spec:
         runAsUser: 0
       containers:
         - name: docker-bench
-          image: ghcr.io/xopham/k8tlery:v0.1
+          image: ghcr.io/xopham/k8tlery:latest
           imagePullPolicy: Always
           command: ["/bin/sh", "-c", "sleep infinity"]
           resources:

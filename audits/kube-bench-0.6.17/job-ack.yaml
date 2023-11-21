@@ -9,7 +9,7 @@ spec:
       hostPID: true
       containers:
         - name: kube-bench
-          image: ghcr.io/xopham/k8tlery:v0.1
+          image: ghcr.io/xopham/k8tlery:latest
           command:
             [
               "kube-bench",
