@@ -1,0 +1,1100 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Penetration testing tool collection, instructions, nix-shell, test container and information for hacking kubernetes and docker containers.">
+      
+      
+      
+        <link rel="canonical" href="https://xopham.github.io/k8tlery/">
+      
+      
+      
+        <link rel="next" href="KubernetesAPI/KubernetesAPI/">
+      
+      
+      <link rel="icon" href="assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.10">
+    
+    
+      
+        <title>k8tlery - Dissect container images, runtimes, and orchestrators.</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#k8tlery" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="k8tlery - Dissect container images, runtimes, and orchestrators." class="md-header__button md-logo" aria-label="k8tlery - Dissect container images, runtimes, and orchestrators." data-md-component="logo">
+      
+  <img src="assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            k8tlery - Dissect container images, runtimes, and orchestrators.
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/xopham/k8tlery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    xopham/k8tlery
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="k8tlery - Dissect container images, runtimes, and orchestrators." class="md-nav__button md-logo" aria-label="k8tlery - Dissect container images, runtimes, and orchestrators." data-md-component="logo">
+      
+  <img src="assets/logo.png" alt="logo">
+
+    </a>
+    k8tlery - Dissect container images, runtimes, and orchestrators.
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xopham/k8tlery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    xopham/k8tlery
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Documentation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Documentation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build &amp; push
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nix-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      nix-shell
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Audit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#container-image-forensics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container image forensics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-forensics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container forensics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-information-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster information gathering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#podcontainer-information-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod/container information gathering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod-exploitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod exploitation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="KubernetesAPI/KubernetesAPI/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubernetes API Spec
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build &amp; push
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nix-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      nix-shell
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Audit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#container-image-forensics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container image forensics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-forensics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container forensics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-information-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster information gathering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#podcontainer-information-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod/container information gathering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod-exploitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod exploitation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="k8tlery">k8tlery<a class="headerlink" href="#k8tlery" title="Permanent link">⚓︎</a></h1>
+<p><img alt="" src="docs/assets/textlogo.png" />
+<img alt="" src="assets/textlogo.png" /></p>
+<p>Dissect container images, runtimes, and orchestrators.</p>
+<h2 id="inventory">Inventory<a class="headerlink" href="#inventory" title="Permanent link">⚓︎</a></h2>
+<table>
+<thead>
+<tr>
+<th>tool</th>
+<th>scope</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/aquasecurity/trivy">trivy</a></td>
+<td></td>
+<td>Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/anchore/syft">syft</a></td>
+<td></td>
+<td>CLI tool and library for generating a Software Bill of Materials from container images and filesystems.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/anchore/grype">grype</a></td>
+<td></td>
+<td>A vulnerability scanner for container images and filesystems.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/aquasecurity/kube-bench">kube-bench</a></td>
+<td></td>
+<td>Checks whether Kubernetes is deployed according to security best practices as defined in the CIS Kubernetes Benchmark.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/bridgecrewio/checkov">checkov</a></td>
+<td></td>
+<td>Prevent cloud misconfigurations and find vulnerabilities during build-time in infrastructure as code, container images and open source packages with Checkov by Bridgecrew.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Shopify/kubeaudit">kubeaudit</a></td>
+<td></td>
+<td>kubeaudit helps you audit your Kubernetes clusters against common security controls.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/sigstore/cosign">cosign</a></td>
+<td></td>
+<td>Container Signing.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/quarkslab/kdigger">kdigger</a></td>
+<td></td>
+<td>Kubernetes focused container assessment and context discovery tool for penetration testing.</td>
+</tr>
+<tr>
+<td><a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a></td>
+<td></td>
+<td>Kubernetes provides a command line tool for communicating with a Kubernetes cluster's control plane, using the Kubernetes API.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/docker/cli">docker</a></td>
+<td></td>
+<td>Command line interface for interacting with docker container images.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/containers/podman">podman</a></td>
+<td></td>
+<td>A tool for managing OCI containers and pods.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/wagoodman/dive">dive</a></td>
+<td></td>
+<td>A tool for exploring a docker image, layer contents, and discovering ways to shrink the size of your Docker/OCI image.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md">crictl</a></td>
+<td></td>
+<td>CLI and validation tools for Kubelet Container Runtime Interface (CRI).</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cyberark/KubiScan">KubiScan</a></td>
+<td></td>
+<td>A tool to scan Kubernetes cluster for risky permissions.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/docker/docker-bench-security">Docker Bench Security</a></td>
+<td></td>
+<td>The Docker Bench for Security is a script that checks for dozens of common best-practices around deploying Docker containers in production.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/inguardians/peirates">peirates</a></td>
+<td></td>
+<td>Peirates, a Kubernetes penetration tool, enables an attacker to escalate privilege and pivot through a Kubernetes cluster. It automates known techniques to steal and collect service account tokens, secrets, obtain further code execution, and gain control of the cluster.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/trufflesecurity/trufflehog">TruffleHog</a></td>
+<td></td>
+<td>Find and verify credentials.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/feeltheajf/trufflehog3">TruffleHog3</a></td>
+<td></td>
+<td>This is an enhanced version of the Python-based truffleHog scanner.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/derailed/popeye">Popeye</a></td>
+<td></td>
+<td>A Kubernetes cluster resource sanitizer.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/derailed/k9s">k9s</a></td>
+<td></td>
+<td>Kubernetes CLI To Manage Your Clusters In Style.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/hadolint/hadolint">Hadolint</a></td>
+<td></td>
+<td>Dockerfile linter, validate inline bash, written in Haskell.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/open-policy-agent/conftest">Conftest</a></td>
+<td></td>
+<td>Write tests against structured configuration data using the Open Policy Agent Rego query language.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/liggitt/audit2rbac">audit2rbac</a></td>
+<td></td>
+<td>Autogenerate RBAC policies based on Kubernetes audit logs.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kubeshark/kubeshark">kubeshark</a></td>
+<td></td>
+<td>The API traffic analyzer for Kubernetes providing real-time K8s protocol-level visibility, capturing and monitoring all traffic and payloads going in, out and across containers, pods, nodes and clusters. Inspired by Wireshark, purposely built for Kubernetes.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/aws-samples/hardeneks">hardeneks</a></td>
+<td></td>
+<td>Runs checks to see if an EKS cluster follows EKS Best Practices.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/genuinetools/amicontained">amicontained</a></td>
+<td></td>
+<td>Container introspection tool. Find out what container runtime is being used as well as features available.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/controlplaneio/kubesec">kubesec</a></td>
+<td></td>
+<td>Security risk analysis for Kubernetes resources.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/aquasecurity/kubectl-who-can">kubectl-who-can</a></td>
+<td></td>
+<td>Show who has RBAC permissions to perform actions on different resources in Kubernetes.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/etcd-io/etcd/tree/main/etcdctl">etcdctl</a></td>
+<td></td>
+<td>etcdctl is a command line client for etcd.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gitleaks/gitleaks">gitleaks</a></td>
+<td></td>
+<td>Gitleaks is a SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos. Gitleaks is an easy-to-use, all-in-one solution for detecting secrets, past or present, in your code.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cyberark/kubeletctl">kubeletctl</a></td>
+<td></td>
+<td>Kubeletctl is a command line tool that implement kubelet's API. Part of kubelet's API is documented but most of it is not. This tool covers all the documented and undocumented APIs.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/aquasecurity/kube-hunter">kube-hunter</a></td>
+<td></td>
+<td>Hunt for security weaknesses in Kubernetes clusters.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/controlplaneio/netassert">netassert</a></td>
+<td></td>
+<td>Network security testing for Kubernetes DevSecOps workflows.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/controlplaneio/truffleproc">truffleproc</a></td>
+<td></td>
+<td>hunt secrets in process memory (TruffleHog &amp; gdb mashup)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/checkpoint-restore/checkpointctl">checkpointctl</a></td>
+<td></td>
+<td>Tool to inspect Kubernetes and Podman checkpoints.</td>
+</tr>
+<tr>
+<td><a href="">...</a></td>
+<td></td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<h2 id="build-push">Build &amp; push<a class="headerlink" href="#build-push" title="Permanent link">⚓︎</a></h2>
+<ul>
+<li>build
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>buildx<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ghcr.io/xopham/k8tlery:<span class="nv">$K8TLERY_VERSION</span><span class="w"> </span>-t<span class="w"> </span>ghcr.io/xopham/k8tlery:latest<span class="w"> </span>.
+</span></code></pre></div></li>
+<li>push
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker push ghcr.io/xopham/k8tlery --all-tags
+</span></code></pre></div></li>
+<li>re-tag
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>find<span class="w"> </span>./<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-exec<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s%ghcr\.io\/xopham\/k8tlery\:v.*%ghcr\.io\/xopham\/k8tlery\:</span><span class="nv">$K8TLERY_VERSION</span><span class="s2">%g&quot;</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
+</span></code></pre></div></li>
+</ul>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">⚓︎</a></h2>
+<h3 id="nix-shell">nix-shell<a class="headerlink" href="#nix-shell" title="Permanent link">⚓︎</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>nix-shell<span class="w"> </span>k8tlery.nix
+</span></code></pre></div>
+<h3 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">⚓︎</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>ghcr.io/xopham/k8tlery:&lt;tag&gt;
+</span></code></pre></div>
+<h3 id="cluster">Cluster<a class="headerlink" href="#cluster" title="Permanent link">⚓︎</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deployment/
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">#or</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deployment/01-roles.yaml
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deployment/02-k8tlery.yaml
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">#or</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deployment/01-roles.yaml
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deployment/03-k8tlery-fullaccess.yaml
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>k8tlery<span class="w"> </span>--<span class="w"> </span>bash
+</span></code></pre></div>
+<h2 id="audit">Audit<a class="headerlink" href="#audit" title="Permanent link">⚓︎</a></h2>
+<h3 id="container-image-forensics">Container image forensics<a class="headerlink" href="#container-image-forensics" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>download and save image
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>pull<span class="w"> </span><span class="nv">$IMAGE</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>save<span class="w"> </span><span class="nv">$IMAGE</span><span class="w"> </span>&gt;<span class="w"> </span>image.tar
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>docker<span class="w"> </span>image<span class="w"> </span>ls
+</span></code></pre></div></li>
+<li>inspect image content
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>inspect<span class="w"> </span><span class="nv">$IMAGE</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>docker<span class="w"> </span><span class="nb">history</span><span class="w"> </span>--no-trunc<span class="w"> </span><span class="nv">$IMAGE</span>
+</span></code></pre></div></li>
+<li>inspect image layers (dive)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>dive<span class="w"> </span><span class="nv">$IMAGE</span>
+</span></code></pre></div></li>
+<li>extract file from image.tar (nix-shell custom functions)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>layer_list<span class="w"> </span><span class="nv">$IMAGETAR</span><span class="w"> </span><span class="nv">$LAYERID</span><span class="w"> </span><span class="nv">$FILE</span><span class="w">  </span><span class="c1">#run &#39;layer_list&#39; for help</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>layer_extract<span class="w"> </span><span class="nv">$IMAGETAR</span><span class="w"> </span><span class="nv">$LAYERID</span><span class="w"> </span><span class="nv">$FILE</span><span class="w">  </span><span class="c1">#run &#39;layer_list&#39; for help</span>
+</span></code></pre></div></li>
+<li>create container w/o running it
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>docker<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>container<span class="w"> </span><span class="nv">$IMAGE</span><span class="w">  </span><span class="c1">#returns container ID CONTID</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>-a<span class="w">  </span><span class="c1">#displays all available container IDs</span>
+</span></code></pre></div></li>
+<li>inspect container filesystems
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>mkdir<span class="w"> </span><span class="nv">$FOLDER</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>docker<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">$CONTID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>-xC<span class="w"> </span><span class="nv">$FOLDER</span><span class="w">  </span><span class="c1">#make sure to unpac to dedicated folder</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>ls<span class="w"> </span>-la<span class="w"> </span><span class="nv">$FOLDER</span>
+</span></code></pre></div></li>
+</ul>
+<h3 id="container-forensics">Container forensics<a class="headerlink" href="#container-forensics" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>create checkpoint of running container w/o interruption, e.g.:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>podman<span class="w"> </span>container<span class="w"> </span>checkpoint<span class="w"> </span>-e<span class="w"> </span><span class="nv">$OUTPUTFILE</span><span class="w"> </span><span class="nv">$CONTID</span><span class="w"> </span>--leave-running
+</span></code></pre></div></li>
+<li>investigate checkpoint (checkpointctl)<ul>
+<li>get info
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>checkpointctl show $OUTPUTFILE
+</span></code></pre></div></li>
+<li>get full details
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>checkpointctl inspect $OUTPUTFILE --all
+</span></code></pre></div></li>
+<li>parse memory
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>checkpointctl<span class="w"> </span>memparse<span class="w"> </span><span class="c1">#OUTPUTFILE --all</span>
+</span></code></pre></div></li>
+<li>inspect container drift
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>tar<span class="w"> </span>-xf<span class="w"> </span><span class="nv">$OUTPUTFILE</span><span class="w"> </span>-C<span class="w"> </span><span class="nv">$TARGETFOLDER</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span><span class="nv">$TARGETFOLDER</span>/rootfs-diff.tar<span class="w"> </span><span class="nv">$DIFFFOLDER</span>
+</span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h3 id="cluster-information-gathering">Cluster information gathering<a class="headerlink" href="#cluster-information-gathering" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>misconfiguration scan<ul>
+<li>trivy
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>trivy<span class="w"> </span>k8s<span class="w"> </span>--report<span class="w"> </span>summary<span class="w"> </span>cluster
+</span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h3 id="podcontainer-information-gathering">Pod/container information gathering<a class="headerlink" href="#podcontainer-information-gathering" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>container runtime
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cat<span class="w"> </span>/proc/self/cgroup
+</span></code></pre></div></li>
+<li>container runtime sockets (might be slow)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>find<span class="w"> </span>/run<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.sock&quot;</span><span class="w">  </span><span class="c1">#adjust target folder</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1"># also need to review &#39;/run&#39; folder manually</span>
+</span></code></pre></div></li>
+<li>hosts information
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cat<span class="w"> </span>/etc/hosts
+</span></code></pre></div></li>
+<li>mount information
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>mount
+</span></code></pre></div></li>
+<li>file system
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>/
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>ls<span class="w"> </span>-la<span class="w"> </span>/home/
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>ls<span class="w"> </span>-la<span class="w"> </span>/root/
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>/tmp/
+</span></code></pre></div></li>
+<li>environment variables
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>printenv
+</span></code></pre></div></li>
+<li>k8s information<ul>
+<li>kdigger
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>curl<span class="w"> </span>-fSL<span class="w"> </span>-o<span class="w"> </span>/tmp/kdigger<span class="w"> </span>https://github.com/quarkslab/kdigger/releases/download/v1.5.0/kdigger-linux-amd64
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/kdigger
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">kdigger</span><span class="o">=</span><span class="s1">&#39;/tmp/kdigger&#39;</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>kdigger<span class="w"> </span>dig<span class="w"> </span>all
+</span></code></pre></div></li>
+<li>kube-hunter
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>kube-hunter
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>kube-hunter<span class="w"> </span>--pod
+</span></code></pre></div></li>
+</ul>
+</li>
+<li>secrets (trufflehog3)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>trufflehog3
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>trufflehog3<span class="w"> </span>/var/run<span class="w">  </span><span class="c1">#choose relevant target folders</span>
+</span></code></pre></div><ul>
+<li>custom rule
+<div class="language-text highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>#k8s-goat.rule
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>- id: k8s-goat.flag
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>  message: found k8s-goat flag
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>  pattern: &quot;k8s-goat-&quot;
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>  severity: HIGH
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>trufflehog3<span class="w"> </span>-r<span class="w"> </span>k8s-goat.rule<span class="w"> </span>/tmp<span class="w">  </span><span class="c1">#adjust rule and target</span>
+</span></code></pre></div></li>
+</ul>
+</li>
+<li>secrets from process memory (truffleproc): <em>needs work</em></li>
+<li>vulnerable packages (trivy)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>curl<span class="w"> </span>-sfL<span class="w"> </span>https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>--<span class="w"> </span>-b<span class="w"> </span>/usr/local/bin
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>trivy<span class="w"> </span>rootfs<span class="w"> </span>/
+</span></code></pre></div></li>
+<li>k8s APIs<ul>
+<li>curl
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nv">APISERVER</span><span class="o">=</span>https://<span class="si">${</span><span class="nv">KUBERNETES_SERVICE_HOST</span><span class="si">}</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="nv">SERVICEACCOUNT</span><span class="o">=</span>/var/run/secrets/kubernetes.io/serviceaccount
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="nv">NAMESPACE</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span><span class="si">${</span><span class="nv">SERVICEACCOUNT</span><span class="si">}</span>/namespace<span class="k">)</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span><span class="si">${</span><span class="nv">SERVICEACCOUNT</span><span class="si">}</span>/token<span class="k">)</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="nv">CACERT</span><span class="o">=</span><span class="si">${</span><span class="nv">SERVICEACCOUNT</span><span class="si">}</span>/ca.crt
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>curl<span class="w"> </span>--cacert<span class="w"> </span><span class="si">${</span><span class="nv">CACERT</span><span class="si">}</span><span class="w"> </span>--header<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="si">${</span><span class="nv">TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-X<span class="w"> </span>GET<span class="w"> </span><span class="si">${</span><span class="nv">APISERVER</span><span class="si">}</span>/api
+</span></code></pre></div></li>
+<li>peirates
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>curl<span class="w"> </span>-fSL<span class="w"> </span>-o<span class="w"> </span>/tmp/peirates.tar.xz<span class="w"> </span>https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/peirates.tar.xz<span class="w"> </span>-C<span class="w"> </span>/tmp
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>chmod<span class="w"> </span>a+x<span class="w"> </span>/tmp/peirates-linux-amd64/peirates
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">peirates</span><span class="o">=</span><span class="s1">&#39;/tmp/peirates-linux-amd64/peirates&#39;</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>peirates
+</span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h3 id="pod-exploitation">Pod exploitation<a class="headerlink" href="#pod-exploitation" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>resource exhaustion (DoS)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">2</span><span class="w"> </span>--cpu-load<span class="w"> </span><span class="m">1</span><span class="w"> </span>--vm<span class="w"> </span><span class="m">2</span><span class="w"> </span>--vm-bytes<span class="w"> </span>100m<span class="w"> </span>-t<span class="w"> </span>100s<span class="w"> </span>--verify<span class="w"> </span>-v<span class="w">  </span><span class="c1">#adjust to use case</span>
+</span></code></pre></div></li>
+<li>various angles (peirates)
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>curl<span class="w"> </span>-fSL<span class="w"> </span>-o<span class="w"> </span>/tmp/peirates.tar.xz<span class="w"> </span>https://github.com/inguardians/peirates/releases/download/v1.1.13/peirates-linux-amd64.tar.xz
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/peirates.tar.xz<span class="w"> </span>-C<span class="w"> </span>/tmp
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>chmod<span class="w"> </span>a+x<span class="w"> </span>/tmp/peirates-linux-amd64/peirates
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">peirates</span><span class="o">=</span><span class="s1">&#39;/tmp/peirates-linux-amd64/peirates&#39;</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>peirates
+</span></code></pre></div></li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">⚓︎</a></h2>
+<ul>
+<li><a href="https://book.hacktricks.xyz/">HackTricks</a> (e.g. <a href="https://book.hacktricks.xyz/network-services-pentesting/2375-pentesting-docker">pentesting docker</a>, <a href="https://cloud.hacktricks.xyz/pentesting-cloud/kubernetes-security">pentesting kubernetes</a>)</li>
+<li><a href="https://madhuakula.com/kubernetes-goat/">Kubernetes Goat</a></li>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html">OWASP Kubernetes Security CS</a></li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <a href="https://securesystems.de">Secure Systems Engineering GmbH</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/sse-secure-systems" target="_blank" rel="noopener" title="SSE on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://medium.com/sse-blog" target="_blank" rel="noopener" title="SSE on Medium" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M180.5 74.262C80.813 74.262 0 155.633 0 256s80.819 181.738 180.5 181.738S361 356.373 361 256 280.191 74.262 180.5 74.262Zm288.25 10.646c-49.845 0-90.245 76.619-90.245 171.095s40.406 171.1 90.251 171.1 90.251-76.619 90.251-171.1H559c0-94.503-40.4-171.095-90.248-171.095Zm139.506 17.821c-17.526 0-31.735 68.628-31.735 153.274s14.2 153.274 31.735 153.274S640 340.631 640 256c0-84.649-14.215-153.271-31.742-153.271Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.youtube.com/channel/UCReAmr98RzwYZeWG6CAwOhg" target="_blank" rel="noopener" title="SSE on YouTube" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/sse_gmbh" target="_blank" rel="noopener" title="SSE on Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/sse-secure-systems-engineering" target="_blank" rel="noopener" title="SSE on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.securesystems.de/" target="_blank" rel="noopener" title="SSE Website" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6 31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0l112.3-112.3zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5 50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5l112.2-112.3c31.5-31.5 82.5-31.5 114 0 27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:christoph.hamsen@securesystems.dev" target="_blank" rel="noopener" title="Email contact" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48H48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2a63.9 63.9 0 0 1-76.8 0L0 176z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "content.code.select", "navigation.top"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.6c14ae12.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>
